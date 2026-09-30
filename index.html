@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>entrega7</title>
+    <link rel="stylesheet" href="./css/style.css"> 
+     <script defer src="./js/main.js"></script>  
+  </head>
+<body>
+    <header>
+      <h1 class="form__title">Carrito de compras</h1>
+    </header>
+    <div class="contenedor">    
+      <aside class="izquierda">
+          <div> 
+            <h2>Cargue los productos</h2>
+          </div>
+          
+          <div class="formProd-text">
+            <div class="inputAgregar">       
+              <div>
+                <label for="articulo">Articulo</label>
+              </div>
+              <input name="articulo" type="text" placeholder="Nombre Articulo" id="articulo">
+            </div>  
+            <div class="inputAgregar">
+              <div>
+                <label for="stock">Cantidad Stock</label>
+                </div>
+              <input name="stock" type="text" placeholder="Cant. stock" id="stock">
+            </div>
+            <div class="inputAgregar">
+              <div>
+                <label for="precio">Precio</label>
+              </div>
+              <input name="precio" type="text" placeholder="precio" id="precio">
+            </div>
+            <div class="inputAgregar">
+              <button id="btn-agregar">Agregar</button>
+            </div>
+          </div>
+      </aside>
+      <main>     
+        <div id="contenedor-stock" class="contenedor-stock">          
+        </div>
+      </main>
+      <aside class="derecha ">
+        <div id="contenedor-carrito" class="contenedor-carrito">
+        </div>
+      </aside>
+    </div>
+    <footer>Marcelo Barroso CopyRight</footer>
+</body>
+</html>
