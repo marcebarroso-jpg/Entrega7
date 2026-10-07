@@ -11,43 +11,58 @@
     <!--css bootstrap-->   
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- custom css-->
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="Images/favicon.ico" type="image/x-icon">
     <title>Carrito de Compras</title>
-</head>
-<body id="ppal">
+  </head>
+<body id="admin">
     <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #18233f;" data-bs-theme="dark"> 
         <div class="container-fluid barranav">
-            <a class="navbar-brand" href="index.html">Carrito de Compras</a>
+            <a class="navbar-brand" href="../index.html">Carrito de Compras</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="index.html">Inicio</a>
+                <a class="nav-link active" aria-current="page" href="../index.html">Inicio</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="pages/pass.html">Administracion</a>
+                <a class="nav-link" href="pass.html">Administracion</a>
                 </li>   
             </ul>
             </div>
         </div>
     </nav>
-    <div class="ppal">
-      <div class="stock">
-        <div class="contenedor-stock" id="contenedor-stock">
-        </div>
-      </div>
-      <aside class="zonaCarrito">
-        <h5>Carrito de compras</h5>
-        <div class="contenedor-carrito" id="contenedor-carrito">
-        </div>
+    <div class="contenedor">    
+      <aside class="izquierda">
+          <div> 
+            <h2>Administracion de productos</h2>
+            <form class="formProd-text" id="AgredaProd">
+              <div class="inputAgregar">       
+                <label for="articulo">Articulo</label>
+                <input name="articulo" type="text" placeholder="Nombre Articulo" id="articulo" required>
+              </div>  
+              <div class="inputAgregar">
+                <label for="stock">Cantidad Stock</label>
+                <input name="stock" type="text" placeholder="Cant. stock" id="stock" required>
+              </div>
+              <div class="inputAgregar">
+                <label for="precio">Precio</label>
+                <input name="precio" type="text" placeholder="precio" id="precio" required>
+              </div>
+              <div class="inputAgregar">
+                <button id="btn-agregar">Agregar</button>
+              </div>
+            </form>
       </aside>
+      <main>     
+        <div id="contenedor-stock" class="contenedor-stock">          
+        </div>
+      </main>
     </div>
-    <footer><strong>Marcelo Alejandro Barroso</strong> Copyright</footer>
+    <footer>Marcelo Barroso CopyRight</footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="/js/main.js"></script>
+    <script defer src="../js/main.js"></script>  
 </body>
 </html>
-    
