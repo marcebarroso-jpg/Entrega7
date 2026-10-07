@@ -98,7 +98,7 @@ function sumarCarrito(e){
         const resultado = buscarProd(productos, e.target.dataset.id)
         if (!(carrito.some(prod => prod.id === parseInt(resultado.id)))) {
             
-            let articuloVendido = new Producto
+            const articuloVendido = new Producto
             articuloVendido.id = resultado.id
             articuloVendido.nombre= resultado.nombre
             articuloVendido.cantStock=1
@@ -122,19 +122,19 @@ function sumarCarrito(e){
 
 
 //Crea dinamicamente la pantalla de prod en stock
-function crearStockHTML(clase,  id, nombre, precio, stock, pantalla) {
+function crearStockHTML(clase, producto, pantalla) {
     let contenedor = document.createElement("div");
     let funcion = "";
     let btn_clase = "";
+    let {id, nombre, cantStock, precio} = producto;
     contenedor.className = `card ${clase}`;
     contenedor.id=`StockProd${id}`;
     pantalla === "admin" ? funcion = "Elminar" : funcion = "Agregar al carrito";
     pantalla === "admin" ? btn_clase = "btn-eliminar" : btn_clase = "btn-carrito";
-
     contenedor.innerHTML = 
         `<div class="card-body">
             <h5 class="card-title">${nombre}</h5>
-            <p class="card-text">Cant. Stock: ${stock}</p>
+            <p class="card-text">Cant. Stock: ${cantStock}</p>
             <p class="card-text">precio: ${precio}</p>
             <a class="btn btn-primary ${btn_clase}" data-id="${parseInt(id)}" id="btn-Carrito${parseInt(id)}">${funcion}</a>
        </div>`             
@@ -154,14 +154,15 @@ function totalCarrito(totalCarrito){
 }
 
 //Crea dinamicamente la pantalla de carrito de compras
-function crearCarritoHTML(clase,  id, nombre, precio, cantidad) {
+function crearCarritoHTML(clase, producto)  {
     let contenedor = document.createElement("div");
+    let {id, nombre, cantStock, precio} = producto;
     contenedor.className = `card ${clase}`;
     contenedor.id=`carrito${id}`;
     contenedor.innerHTML = 
     `<div class="card-body">
         <h6 class="card-title">${nombre}</h6>
-        <p class="card-text">Cant: ${cantidad}</p>
+        <p class="card-text">Cant: ${cantStock}</p>
         <p class="card-text">precio: ${precio}</p>
         <a class="btn btn-primary btn-mas" data-id="${parseInt(id)}" id="btn-mas${parseInt(id)}">+</a>
         <a class="btn btn-primary btn-menos" data-id="${parseInt(id)}" id="btn-menos${parseInt(id)}">-</a>
@@ -186,17 +187,17 @@ function generarCheckout (contenedor){
 
 
 //genera las pantalla de stock o carrito segun parametros
-function generaPantalla (clase,contenedor, productos){
+function generaPantalla (clase, contenedor, productos){
     contenedor.innerHTML = ""
     switch (clase) {
         case "cardStock":
         productos.forEach(producto=>{
-            crearStockHTML(clase, producto.id, producto.nombre, producto.precio, producto.cantStock,pantalla)   
+            crearStockHTML(clase, producto, pantalla)   
         })
         break;
         case "carrito":
             productos.forEach(producto=>{
-            crearCarritoHTML(clase, producto.id, producto.nombre, producto.precio, producto.cantStock)
+            crearCarritoHTML(clase, producto)
             }
         )
         console.log(pantalla)

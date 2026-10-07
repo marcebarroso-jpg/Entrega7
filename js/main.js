@@ -1,7 +1,7 @@
 console.log("version con localStorage");
 console.log(localStorage.getItem("primerIngreso"));
 
-if (localStorage.getItem("primerIngreso")=== "false"){
+if (!localStorage.getItem("primerIngreso")){
     
 const productosIniciales= [
     {
