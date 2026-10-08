@@ -112,19 +112,21 @@ main {
 }
 
 
-.formProd-text{
-    background-color: #f8f9fa;
+.adminProd{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin: 10px;
     padding: 10px;
-    text-align: left;
-   
 }
-.inputAgregar{
-    margin-bottom: 10px;
-    padding: 0px;
-    text-align: left;
-    
+
+.adminProd > h2{
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
 }
+
+
 .form__input-container input,
 .form__input-container select{
     width: 100%;
@@ -284,7 +286,61 @@ main {
     font-weight: bold;
 }
 
+.tarjeta-resumen {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  font-family: system-ui, -apple-system, sans-serif;
+}
 
+.tarjeta-resumen h2 {
+  margin: 0 0 20px 0;
+  font-size: 1.25rem;
+  color: #1e293b;
+}
+
+.item-resumen {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-resumen span {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.item-resumen strong {
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+.item-resumen.destacado {
+  background-color: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #2563eb;
+}
+
+.item-resumen.productos {
+  background-color: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+.item-resumen.destacado strong {
+  font-size: 1.75rem;
+  color: #2563eb;
+}
+
+.grid-resumen {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
 
 footer{
     padding: 60px;

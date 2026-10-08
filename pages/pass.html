@@ -18,7 +18,10 @@
 <body id="pass">
     <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #18233f;" data-bs-theme="dark"> 
         <div class="container-fluid barranav">
-            <a class="navbar-brand" href="../index.html">Carrito de Compras</a>
+            <a class="navbar-brand" href="../index.html">
+                <img src="../Images/favicon.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                Carrito de Compras
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -35,46 +38,64 @@
         </div>
     </nav>
     <main>     
-      <div class="login-page">
-        <div class="login-card">
-            <h1 class="login-title">
-                Iniciar Sesión
-            </h1>
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <label for="usuario">
-                        Usuario
-                    </label>
-                    <input
-                        type="text"
-                        id="usuario"
-                        name="usuario"
-                        placeholder="Ingrese su usuario"
-                        required>
+        <div class="login-page">
+            <div class="login-card">
+                <h1 class="login-title">
+                    Iniciar Sesión
+                </h1>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="usuario">
+                            Usuario
+                        </label>
+                        <input
+                            type="text"
+                            id="usuario"
+                            name="usuario"
+                            placeholder="Ingrese su usuario"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">
+                            Contraseña
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Ingrese su contraseña"
+                            required>
+                    </div>
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary btn-final" data-bs-toggle="modal" data-bs-target="#modalDenegado">
+                        Ingresar
+                    </button>
+                </form>
+            </div>
+            <div class="modal fade" id="modalDenegado" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">      
+                        <div class="modal-header">
+                            <h5 class="modal-title">Acceso denegado</h5>
+                        </div>
+                        <div class="modal-body">
+                            Verifica el usuario o la contraseña
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                                Aceptar
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="password">
-                        Contraseña
-                    </label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Ingrese su contraseña"
-                        required>
-                </div>
-                <button
-                    type="submit"
-                    class="btn btn-primary btn-login">
-                    Ingresar
-                </button>
-            </form>
+            </div>
         </div>
-
-      </div>
     </main>
     <footer>Marcelo Barroso CopyRight</footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script defer src="../js/main.js"></script>  
+    <script defer src="../js/clases.js"></script>
+    <script defer src="../js/funciones.js"></script>
+    <script defer src="../js/main.js"></script>
 </body>
 </html>
