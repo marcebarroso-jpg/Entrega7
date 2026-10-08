@@ -15,35 +15,28 @@ function vender(funcion,carrito, producto, prodCarrito){
             producto.cantStock--;
             switch (funcion) {
             case "agregar": 
-                console.log("agregar")
                 if (!(carrito.some(prod => prod.id === parseInt(prodCarrito.id)))) {
-                    console.log("agrego")
                     carrito.push(prodCarrito);
                 }
                 else{
-                    //console.log("sumo")
                     prodCarrito.cantStock++;    
                 }
                 break;
             case "sumar":
-                //console.log("sumar")
                 prodCarrito.cantStock++;
                 break
             }
         }
         else{
-            console.log("menos 0")
             alert("no hay stock!");
         }
 }
 
 //resta un articulo del carrito
 function restarArticulo(e, pantalla){
-    console.log("restarArticulo")
     if (e.target.classList.contains("btn-menos")) {
-        console.log(e.target.dataset.id);
-        const resultado = buscarProd(productos, e.target.dataset.id)
-        const resultadoCarrito = buscarProd(carrito, e.target.dataset.id)
+        const resultado = buscarProd(productos, obtieneId(e.target.classList[3]))
+        const resultadoCarrito = buscarProd(carrito, obtieneId(e.target.classList[3]))
         if (resultadoCarrito.cantStock > 1){
             resultadoCarrito.cantStock--;
             resultado.cantStock++;
@@ -64,9 +57,8 @@ function restarArticulo(e, pantalla){
 //resta un articulo del carrito
 function sumarArticulo(e, pantalla){
     if (e.target.classList.contains("btn-mas")) {
-        console.log(e.target.dataset.id);
-        const resultado = buscarProd(productos, e.target.dataset.id)
-        const resultadoCarrito = buscarProd(carrito, e.target.dataset.id)
+        const resultado = buscarProd(productos, obtieneId(e.target.classList[3]))
+        const resultadoCarrito = buscarProd(carrito,obtieneId(e.target.classList[3]))
         vender("sumar", carrito, resultado, resultadoCarrito);
         generaPantalla("carrito", contenedorCarrito, carrito);
         if (pantalla === "ppal") {
@@ -81,8 +73,8 @@ function sumarArticulo(e, pantalla){
 //elimina articulo del carrito (del array y de la pantalla)
 function eliminarProductoCarrito(e, pantalla){
     if (e.target.classList.contains("btn-eliminarCarrito")) {
-        const resultado = buscarProd(productos, e.target.dataset.id)
-        const resultadoCarrito = buscarProd(carrito, e.target.dataset.id)
+        const resultado = buscarProd(productos, obtieneId(e.target.classList[3]))
+        const resultadoCarrito = buscarProd(carrito, obtieneId(e.target.classList[3]))
         carrito.splice(carrito.indexOf(resultadoCarrito),1)
         resultado.cantStock = resultado.cantStock + resultadoCarrito.cantStock;
     }
@@ -99,7 +91,7 @@ function eliminarProductoCarrito(e, pantalla){
 //crea un nuevo articulo en el carrito, descuenta de producto
 function sumarCarrito(e){
     if (e.target.classList.contains("btn-carrito")) {
-        const resultado = buscarProd(productos, e.target.dataset.id)
+        const resultado = buscarProd(productos, obtieneId(e.target.classList[3]))
         if (!(carrito.some(prod => prod.id === parseInt(resultado.id)))) {
             
             let articuloVendido = new Producto
@@ -139,7 +131,7 @@ function crearStockHTML(clase,  producto, pantalla) {
             <h5 class="card-title">${nombre}</h5>
             <p class="card-text">Cant. Stock: ${cantStock}</p>
             <p class="card-text">precio: ${precio}</p>
-            <a class="btn btn-primary ${btn_clase}" data-id="${parseInt(id)}" id="btn-Carrito${parseInt(id)}">${funcion}</a>
+            <a class="btn btn-primary ${btn_clase} id-${parseInt(id)}" id="btn-Carrito">${funcion}</a>
         </div>`             
     contenedorStock.appendChild(contenedor);
 }
@@ -168,9 +160,10 @@ function crearCarritoHTML(clase, producto) {
         <h6 class="card-title">${nombre}</h6>
         <p class="card-text">Cant: ${cantStock}</p>
         <p class="card-text">precio: ${precio}</p>
-        <a class="btn btn-primary btn-mas" data-id="${parseInt(id)}" id="btn-mas${parseInt(id)}">+</a>
-        <a class="btn btn-primary btn-menos" data-id="${parseInt(id)}" id="btn-menos${parseInt(id)}">-</a>
-        <a class="btn btn-primary btn-eliminarCarrito" data-id="${parseInt(id)}" id="btn-menos${parseInt(id)} ">Quitar</a>
+        <p class="card-text" hidden>${id}</p>
+        <a class="btn btn-primary btn-mas id-${parseInt(id)}"  id="btn-mas">+</a>
+        <a class="btn btn-primary btn-menos id-${parseInt(id)}"  id="btn-menos">-</a>
+        <a class="btn btn-primary btn-eliminarCarrito id-${parseInt(id)}" id="btn-menos">Quitar</a>
     </div>`;
     contenedorCarrito.appendChild(contenedor);
 }
@@ -302,7 +295,7 @@ function checkout(e){
             </div>
         </div>
         `;  
-        zonaPpal.replaceWith(pantalla);
+       // zonaPpal.replaceWith(pantalla);
 
         const modal = document.getElementById("modalCompra");
         modal.addEventListener("hidden.bs.modal", () => {
@@ -379,8 +372,8 @@ function eliminarArticulo(e){
     if (e.target.classList.contains("btn-eliminar")) {
         const h5 = prod.querySelector("h5");
         console.log(h5)
-        bajaProducto(productos, e.target.dataset.id)
-        bajaProducto(carrito, e.target.dataset.id)
+        bajaProducto(productos,obtieneId(e.target.classList[3]))
+        bajaProducto(carrito, obtieneId(e.target.classList[3]))
         prod.remove();
         guardarLocalStorage("productos", productos);
         guardarLocalStorage("carrito", carrito);
@@ -390,6 +383,12 @@ function eliminarArticulo(e){
     
 };
 
+function obtieneId (clase){
+    console.log(clase)
+    console.log(parseInt(clase.split("-")[1]))
+    return (parseInt(clase.split("-")[1]))
+}
+
 function verificarUsuario(user, pass){
     const userOK= "Mbarroso"
     const passOK = "1234"
@@ -397,20 +396,35 @@ function verificarUsuario(user, pass){
 }
 function login(e){
     e.preventDefault()
-    console.log("dentro")
     let user = "";
     let pass = "";
     const form = document.getElementById('loginForm');
+    const modal= document.createElement("div");
     const datos = new FormData(form);
     user = datos.get("usuario")
     pass = datos.get("password")
-    if (verificarUsuario(user, pass)){
-        window.location.href = "admin.html";
-    }   
-    else{
-        alert("acceso denegado") ;
-    }  
-    
+    verificarUsuario(user, pass) ?  window.location.href = "admin.html": 
+    modal.innerHTML = `
+     <div class="modal fade" id="modalDenegado" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">      
+                        <div class="modal-header">
+                            <h5 class="modal-title">Acceso denegado</h5>
+                        </div>
+                        <div class="modal-body">
+                            Verifica el usuario o la contraseña
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                                Aceptar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    `;
+    form.appendChild(modal)
+     
 }
 
 function detalleVentas(ventas){
@@ -448,7 +462,7 @@ function detalleVentas(ventas){
                         </div>
                         <div class="item-resumen">
                             <span>Direccion:</span>
-                            <strong id="fecha">${venta.Envio.nombre}</strong>
+                            <strong id="fecha">${venta.Envio.direccion}</strong>
                         </div>
                         <div class="item-resumen">
                             <span>Email:</span>
@@ -472,10 +486,11 @@ function detalleVentas(ventas){
         
         let i=0;
         venta.productos.forEach(prod => {
+            i++;
             totalProd += parseInt(prod.cantStock)
             htmlDetalle +=`
                                 <tr>
-                                    <th scope="row">i</th>
+                                    <th scope="row">${i}</th>
                                     <td>${prod.id}</td>
                                     <td>${prod.nombre}</td>
                                     <td>${prod.cantStock}</td>
