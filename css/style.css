@@ -291,7 +291,6 @@ main {
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 24px;
-  max-width: 400px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   font-family: system-ui, -apple-system, sans-serif;
 }
@@ -326,6 +325,12 @@ main {
   border-left: 4px solid #2563eb;
 }
 
+.item-resumen.productos {
+  background-color: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
 .item-resumen.destacado strong {
   font-size: 1.75rem;
   color: #2563eb;
@@ -333,7 +338,7 @@ main {
 
 .grid-resumen {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
 }
 

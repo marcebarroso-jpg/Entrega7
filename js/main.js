@@ -75,7 +75,7 @@ switch (pantalla){
         btnAgregar.addEventListener('click', (e) => {
             cargarActiculo(e, productos,contenedorStock);
         });
-        ResumenVentas(ventas);
+        resumenVentas(ventas);
     break;
     case "checkout":
         console.log("checkout")

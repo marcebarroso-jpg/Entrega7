@@ -413,35 +413,116 @@ function login(e){
     
 }
 
-function ResumenVentas(ventas){
-    let resumen = document.getElementById("contenedor-ventas-lista");
+function detalleVentas(ventas){
+    let detalle = document.getElementById("contenedor-ventas-lista");
+    let htmlDetalle = "";
     //let resumenProd = document.getElementById("resumen-productos");
     //let resumenEnvios = document.getElementById("resumen-envios");
     let totalVentas = 0;
     let totalProd = 0;
+    htmlDetalle +=`
+        <div class="ventas" id="ventas">
+            <div id="detalle-ventas" class="detalle-ventas">
+                
+                <div class="tarjeta-resumen">
+                    <h2>Detalle de ventas</h2>`;
+    ventas.forEach(venta => {
+        htmlDetalle +=`
+                <div class="tarjeta-resumen">    
+                    <div class="grid-resumen">
+                        <div class="item-resumen">
+                            <span>Nro de Venta:</span>
+                            <strong id="idVta">${venta.id}</strong>
+                        </div>
+                        <div class="item-resumen">
+                            <span>Fecha:</span>
+                            <strong id="fecha">${venta.fecha}</strong>
+                        </div>
+                    </div>
+                    <hr>    
+                    <h2>Datos del Envio</h2>
+                    <div class="grid-resumen">
+                        <div class="item-resumen">
+                            <span>Comprador:</span>
+                            <strong id="Comprador">${venta.Envio.nombre} ${venta.Envio.apellido}</strong>
+                        </div>
+                        <div class="item-resumen">
+                            <span>Direccion:</span>
+                            <strong id="fecha">${venta.Envio.nombre}</strong>
+                        </div>
+                        <div class="item-resumen">
+                            <span>Email:</span>
+                            <strong id="fecha">${venta.Envio.email}</strong>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="item-resumen productos">
+                        <span>Productos</span>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Id Producto</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Precio Unitario</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+        
+        let i=0;
+        venta.productos.forEach(prod => {
+            totalProd += parseInt(prod.cantStock)
+            htmlDetalle +=`
+                                <tr>
+                                    <th scope="row">i</th>
+                                    <td>${prod.id}</td>
+                                    <td>${prod.nombre}</td>
+                                    <td>${prod.cantStock}</td>
+                                    <td>${prod.precio}</td>
+                                </tr>
+            `;
+        });      
+        totalVentas += parseFloat(venta.total);  
+        htmlDetalle +=`<tbody class="table-group-divider">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total Venta</td>
+                                    <td>${totalVentas}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>    
+                </div>`;       
+        
+    });    
+    detalle.innerHTML = htmlDetalle;
+    detalle.innerHTML +=`
+                </div>
+            </div>
+        </div>`;
+       
+}  
+
+function resumenVentas(ventas){
+    let resumen = document.getElementById("contenedor-ventas");
+    let totalVentas = 0;
+    let totalProd = 0;
     ventas.forEach(venta => {
         totalVentas += parseFloat(venta.total);
-        console.log(venta.productos)
         venta.productos.forEach(prod => {
             totalProd += parseInt(prod.cantStock)
         });
     });    
 
+    if (ventas.length > 0){
     document.getElementById("resumen-total").textContent = `$ ${totalVentas}`;
     document.getElementById("resumen-cantidad").textContent = ventas.length;
     document.getElementById("resumen-ticket").textContent = `$ ${totalVentas / ventas.length || 0}`;
     document.getElementById("resumen-productos").textContent = totalProd;
-    
-
-    /*resumen.innerHTML= `<div class="tarjeta-resumen">
-                            <h2>Resumen de Ventas</h2>
-                            <div class="item-resumen">
-                                <span>Total Ventas</span>
-                                <strong id="resumen-ventas">$ ${totalVentas}</strong>
-                            </div>
-                            <div class="item-resumen">
-                                <span>Productos Vendidos</span>
-                                <strong id="resumen-productos">${totalProd}</strong>
-                            </div>
-                        </div>`;*/
+    detalleVentas(ventas);
+    }   
+        
 }   
