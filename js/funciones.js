@@ -124,22 +124,23 @@ function sumarCarrito(e){
 
 
 //Crea dinamicamente la pantalla de prod en stock
-function crearStockHTML(clase,  id, nombre, precio, stock, pantalla) {
+function crearStockHTML(clase,  producto, pantalla) {
     let contenedor = document.createElement("div");
     let funcion = "";
     let btn_clase = "";
+    const {id, nombre, cantStock, precio} = producto;
     contenedor.className = `card ${clase}`;
-    contenedor.id=`StockProd${id}`;
+    contenedor.id=`StockProd${producto.id}`;
     pantalla === "admin" ? funcion = "Elminar" : funcion = "Agregar al carrito";
     pantalla === "admin" ? btn_clase = "btn-eliminar" : btn_clase = "btn-carrito";
 
     contenedor.innerHTML = 
         `<div class="card-body">
             <h5 class="card-title">${nombre}</h5>
-            <p class="card-text">Cant. Stock: ${stock}</p>
+            <p class="card-text">Cant. Stock: ${cantStock}</p>
             <p class="card-text">precio: ${precio}</p>
             <a class="btn btn-primary ${btn_clase}" data-id="${parseInt(id)}" id="btn-Carrito${parseInt(id)}">${funcion}</a>
-       </div>`             
+        </div>`             
     contenedorStock.appendChild(contenedor);
 }
 
@@ -156,14 +157,16 @@ function totalCarrito(totalCarrito){
 }
 
 //Crea dinamicamente la pantalla de carrito de compras
-function crearCarritoHTML(clase,  id, nombre, precio, cantidad) {
+function crearCarritoHTML(clase, producto) {
     let contenedor = document.createElement("div");
-    contenedor.className = `card ${clase}`;
+    const {id, nombre, cantStock, precio} = producto;
+        contenedor.className = `card ${clase}`;
     contenedor.id=`carrito${id}`;
+    
     contenedor.innerHTML = 
     `<div class="card-body">
         <h6 class="card-title">${nombre}</h6>
-        <p class="card-text">Cant: ${cantidad}</p>
+        <p class="card-text">Cant: ${cantStock}</p>
         <p class="card-text">precio: ${precio}</p>
         <a class="btn btn-primary btn-mas" data-id="${parseInt(id)}" id="btn-mas${parseInt(id)}">+</a>
         <a class="btn btn-primary btn-menos" data-id="${parseInt(id)}" id="btn-menos${parseInt(id)}">-</a>
@@ -191,12 +194,12 @@ function generaPantalla (clase,contenedor, productos){
     switch (clase) {
         case "cardStock":
         productos.forEach(producto=>{
-            crearStockHTML(clase, producto.id, producto.nombre, producto.precio, producto.cantStock,pantalla)   
+            crearStockHTML(clase, producto, pantalla)   
         })
         break;
         case "carrito":
             productos.forEach(producto=>{
-            crearCarritoHTML(clase, producto.id, producto.nombre, producto.precio, producto.cantStock)
+            crearCarritoHTML(clase, producto)
             }
         )
      //   console.log(pantalla)
@@ -311,10 +314,13 @@ function checkout(e){
 }   
 
 function guardarVenta(carrito, datos, totalCarrito ){
-    const venta = new Venta;
+    const venta = new Venta ;
     venta.id = venta.nextId();
     venta.fecha = new Date();
-    venta.productos = {...carrito};
+    venta.productos= []
+    carrito.forEach(c => {
+        venta.productos.push(c)
+    });
     venta.Envio = { nombre: datos.get("nombre"),
                     apellido: datos.get("apellido"),
                     direccion: datos.get("direccion"),
@@ -355,7 +361,7 @@ function cargarActiculo(e, productos,contenedor){
     let articulo = "";
     let precio = "";
     let stock = "";
-    const form = document.getElementById('AgredaProd');
+    const form = document.getElementById('AgregaProd');
     const datos = new FormData(form);
     articulo = datos.get("articulo")
     stock = datos.get("stock")
@@ -407,4 +413,35 @@ function login(e){
     
 }
 
-     
+function ResumenVentas(ventas){
+    let resumen = document.getElementById("contenedor-ventas-lista");
+    //let resumenProd = document.getElementById("resumen-productos");
+    //let resumenEnvios = document.getElementById("resumen-envios");
+    let totalVentas = 0;
+    let totalProd = 0;
+    ventas.forEach(venta => {
+        totalVentas += parseFloat(venta.total);
+        console.log(venta.productos)
+        venta.productos.forEach(prod => {
+            totalProd += parseInt(prod.cantStock)
+        });
+    });    
+
+    document.getElementById("resumen-total").textContent = `$ ${totalVentas}`;
+    document.getElementById("resumen-cantidad").textContent = ventas.length;
+    document.getElementById("resumen-ticket").textContent = `$ ${totalVentas / ventas.length || 0}`;
+    document.getElementById("resumen-productos").textContent = totalProd;
+    
+
+    /*resumen.innerHTML= `<div class="tarjeta-resumen">
+                            <h2>Resumen de Ventas</h2>
+                            <div class="item-resumen">
+                                <span>Total Ventas</span>
+                                <strong id="resumen-ventas">$ ${totalVentas}</strong>
+                            </div>
+                            <div class="item-resumen">
+                                <span>Productos Vendidos</span>
+                                <strong id="resumen-productos">${totalProd}</strong>
+                            </div>
+                        </div>`;*/
+}   

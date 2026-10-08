@@ -39,30 +39,65 @@
     </nav>
     <div class="contenedor">    
       <aside class="izquierda">
-          <div> 
-            <h2>Administracion de productos</h2>
-            <form class="formProd-text" id="AgredaProd">
-              <div class="inputAgregar">       
-                <label for="articulo">Articulo</label>
-                <input name="articulo" type="text" placeholder="Nombre Articulo" id="articulo" required>
-              </div>  
-              <div class="inputAgregar">
-                <label for="stock">Cantidad Stock</label>
-                <input name="stock" type="text" placeholder="Cant. stock" id="stock" required>
-              </div>
-              <div class="inputAgregar">
-                <label for="precio">Precio</label>
-                <input name="precio" type="text" placeholder="precio" id="precio" required>
-              </div>
-              <div class="inputAgregar">
-                <button id="btn-agregar">Agregar</button>
-              </div>
-            </form>
-          </div>  
+            <nav class="nav flex-column">
+              <a class="nav-link active" aria-current="page" href="#adminProd">Admin</a>
+              <a class="nav-link" href="#ventas">Ventas actuales</a>
+            </nav>
       </aside>
-      <main>     
-        <div id="contenedor-stock" class="contenedor-stock">          
+      <main>
+
+        <div class="adminProd" id="adminProd"> 
+          <h2>Administracion de productos</h2>
+          <form class="row g-3" id="AgregaProd">
+            <div class="col-md-3">
+              <label for="articulo" class="form-label">Articulo</label>
+              <input type="text" class="form-control" name="articulo" id="articulo" required>
+            </div>
+            <div class="col-md-3">
+              <label for="stock" class="form-label">Cantidad Stock</label>
+              <input type="number" class="form-control" name="stock" id="stock" required>
+            </div>
+            <div class="col-md-6">
+              <label for="precio" class="form-label">Precio</label>
+              <input type="number" min="0" step="0.01" placeholder="0.00" class="form-control" name="precio" id="precio" required>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btnAgregar" id="btn-agregar">Agregar</button>
+            </div>
+          </form>
+          <hr>
+          <h3>Productos en Stock</h3>
+          <div id="contenedor-stock" class="contenedor-stock">          
+          </div>
         </div>
+        <div class="ventas" id="ventas">
+          <div id="contenedor-ventas" class="contenedor-ventas">
+            <div class="tarjeta-resumen">
+              <h2>Resumen de Ventas</h2>
+              <div class="item-resumen destacado">
+                <span>Total Facturado</span>
+                <strong id="resumen-total">$ 0,00</strong>
+              </div>
+              <div class="grid-resumen">
+                <div class="item-resumen">
+                  <span>Ventas Realizadas</span>
+                  <strong id="resumen-cantidad">0</strong>
+                </div>
+
+                <div class="item-resumen">
+                  <span>Ticket Promedio</span>
+                  <strong id="resumen-ticket">$ 0,00</strong>
+                </div>
+
+                <div class="item-resumen">
+                  <span>Productos Vendidos</span>
+                  <strong id="resumen-productos">0</strong>
+                </div>
+              </div>
+            </div>    
+            <div id="contenedor-ventas-lista" class="contenedor-ventas-lista">
+            </div>
+          </div>
       </main>
     </div>
     <footer>Marcelo Barroso CopyRight</footer>
