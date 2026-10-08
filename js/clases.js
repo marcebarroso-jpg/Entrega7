@@ -6,6 +6,16 @@ class Producto{
         this.cantStock = cantStock;
         this.precio = precio;
     }
+    nextId(){
+        let id = 0;
+        if (localStorage.getItem("productos")){
+            const prods = JSON.parse(localStorage.getItem("productos"));
+            if (prods.length > 0){
+                id = prods[prods.length - 1].id + 1;
+            }
+        }
+        return id;
+    }
     cargaStock (cant){
         this.cantStock = this.cantStock + cant;
     }
