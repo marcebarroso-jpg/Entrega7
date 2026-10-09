@@ -1,44 +1,40 @@
-console.log("version con localStorage");
-console.log(localStorage.getItem("primerIngreso"));
-
-if (!localStorage.getItem("primerIngreso")){
-    
-const productosIniciales= [
-    {
-        id: 0,
-        nombre: "monitor",
-        cantStock: 50,
-        precio: 300
-    },
-    {
-        id: 1,
-        nombre: "teclado",
-        cantStock: 50,
-        precio:10
-    },
-    {
-        id: 2,
-        nombre: "impresora",
-        cantStock: 55,
-        precio:150
-    },
-    {
-        id: 3,
-        nombre: "mouse",
-        cantStock: 50,
-        precio:50 
-    },
-    {
-        id: 4,
-        nombre: "auriculares",
-        cantStock: 50,
-        precio:350
-    }
-];
-localStorage.setItem("productos", JSON.stringify(productosIniciales));
-localStorage.setItem("carrito", JSON.stringify([]));
-localStorage.setItem("ventas", JSON.stringify([]));
-localStorage.setItem("primerIngreso", "true");
+if (localStorage.getItem("primerIngreso") === "false"){
+    const productosIniciales= [
+        {
+            id: 0,
+            nombre: "monitor",
+            cantStock: 50,
+            precio: 300
+        },
+        {
+            id: 1,
+            nombre: "teclado",
+            cantStock: 50,
+            precio:10
+        },
+        {
+            id: 2,
+            nombre: "impresora",
+            cantStock: 55,
+            precio:150
+        },
+        {
+            id: 3,
+            nombre: "mouse",
+            cantStock: 50,
+            precio:50 
+        },
+        {
+            id: 4,
+            nombre: "auriculares",
+            cantStock: 50,
+            precio:350
+        }
+    ];
+    localStorage.setItem("productos", JSON.stringify(productosIniciales));
+    localStorage.setItem("carrito", JSON.stringify([]));
+    localStorage.setItem("ventas", JSON.stringify([]));
+    localStorage.setItem("primerIngreso", "true");
 }
 
 const productos = JSON.parse(localStorage.getItem("productos"));
@@ -67,18 +63,20 @@ switch (pantalla){
         contenedorCarrito.addEventListener('click',(e) => checkout(e, pantalla)); 
     break;
     case "admin":
-        console.log("admin");
         btnAgregar = document.getElementById("btn-agregar");
-        contenedorStock = document.getElementById("contenedor-stock")   
+        contenedorStock = document.getElementById("contenedor-stock")
+        contenedorAdminProd = document.getElementById("adminProd")
         generaPantalla ("cardStock", contenedorStock, productos);  
-        contenedorStock.addEventListener('click', eliminarArticulo);
+        contenedorStock.addEventListener('click', (e) => {
+            eliminarArticulo(e, productos);
+        });
+        contenedorStock.addEventListener('click', ActualizarArticulo);
         btnAgregar.addEventListener('click', (e) => {
             cargarActiculo(e, productos,contenedorStock);
         });
         resumenVentas(ventas);
     break;
     case "checkout":
-        console.log("checkout")
         contenedorCarrito = document.getElementById("contenedor-carrito")
         zonaForm = document.getElementById("zona-form")
         zonaPpal= document.getElementById("ppal-checkout");
@@ -90,7 +88,6 @@ switch (pantalla){
         zonaPpal.addEventListener('click', checkout);
     break;  
     case "pass":
-        console.log("pass")
         zonaPass = document.getElementById("loginForm")
         zonaPass.addEventListener('submit', login);
     break;
