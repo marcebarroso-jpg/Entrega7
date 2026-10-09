@@ -31,7 +31,7 @@ class Venta{
         this.total = total;
     }
     nextId(){
-        let id = 0;
+        let id = 1;
         if (localStorage.getItem("ventas")){
             const ventas = JSON.parse(localStorage.getItem("ventas"));
             if (ventas.length > 0){

@@ -22,7 +22,11 @@ function vender(carrito, producto, prodCarrito){
             return true
         }
         else{
-            return false
+            const modalElement = document.getElementById("sinStock");
+            if (modalElement) {
+                const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+                modal.show();
+            }
         }
 }
 
@@ -408,12 +412,6 @@ function sumarArticulo(e, pantalla){
     }   
 }
 
-
-
-
-
-
-
 function obtieneId (clase){
     return (parseInt(clase.split("-")[1]))
 }
@@ -460,13 +458,28 @@ function detalleVentas(ventas){
     let detalle = document.getElementById("contenedor-ventas-lista");
     let htmlDetalle = "";
     let totalProd = 0;
+    let medioDePago = "";
     htmlDetalle +=`
         <div class="ventas" id="ventas">
             <div id="detalle-ventas" class="detalle-ventas">
                 
                 <div class="tarjeta-resumen">
                     <h2>Detalle de ventas</h2>`;
-    ventas.forEach(venta => {
+        ventas.forEach(venta => {
+        switch (venta.mpago) {
+        case "credito":
+            medioDePago = "Tarjeta de crédito";
+            break;
+        case "debito":
+            medioDePago = "Tarjeta de débito";
+            break;
+        case "transferencia":
+            medioDePago = "Transferencia bancaria";
+            break;
+        case "mercadopago":
+            medioDePago = "Mercado Pago";
+            break;
+        }   
         htmlDetalle +=`
                 <div class="tarjeta-resumen">    
                     <div class="grid-resumen">
@@ -493,6 +506,10 @@ function detalleVentas(ventas){
                         <div class="item-resumen">
                             <span>Email:</span>
                             <strong id="fecha">${venta.Envio.email}</strong>
+                        </div>
+                        <div class="item-resumen">
+                            <span>Método de Pago:</span>
+                            <strong id="fecha">${medioDePago}</strong>
                         </div>
                     </div>
                     <hr>
