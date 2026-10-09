@@ -7,28 +7,26 @@ function buscarProd (productos, id) {
     return productos.find(producto => producto.id === parseInt(id))
 }
 
-function vender(funcion,carrito, producto, prodCarrito){
+function vender(carrito, producto, prodCarrito){
     /*  descontar de stock
         carrito: 1ra vta - genero carrito
                 sgte vta - sumo 1 stoc de carrito */
         if (producto.cantStock > 0){
             producto.cantStock--;
-            switch (funcion) {
-            case "agregar": 
-                if (!(carrito.some(prod => prod.id === parseInt(prodCarrito.id)))) {
+            if (!(carrito.some(prod => prod.id === parseInt(prodCarrito.id)))) {
                     carrito.push(prodCarrito);
-                }
-                else{
-                    prodCarrito.cantStock++;    
-                }
-                break;
-            case "sumar":
-                prodCarrito.cantStock++;
-                break
             }
+            else{
+                prodCarrito.cantStock++;    
+            }
+            return true
         }
         else{
-            alert("no hay stock!");
+            const modalElement = document.getElementById("sinStock");
+            if (modalElement) {
+                const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+                modal.show();
+            }
         }
 }
 
@@ -59,7 +57,7 @@ function sumarArticulo(e, pantalla){
     if (e.target.classList.contains("btn-mas")) {
         const resultado = buscarProd(productos, obtieneId(e.target.classList[3]))
         const resultadoCarrito = buscarProd(carrito,obtieneId(e.target.classList[3]))
-        vender("sumar", carrito, resultado, resultadoCarrito);
+        vender(carrito, resultado, resultadoCarrito);
         generaPantalla("carrito", contenedorCarrito, carrito);
         if (pantalla === "ppal") {
             generaPantalla("cardStock",contenedorStock, productos);        
@@ -93,18 +91,13 @@ function sumarCarrito(e){
     if (e.target.classList.contains("btn-carrito")) {
         const resultado = buscarProd(productos, obtieneId(e.target.classList[3]))
         if (!(carrito.some(prod => prod.id === parseInt(resultado.id)))) {
-            
             let articuloVendido = new Producto
-        /*   articuloVendido.id = resultado.id
-            articuloVendido.nombre= resultado.nombre
-            articuloVendido.cantStock=1
-            articuloVendido.precio=resultado.precio*/
             articuloVendido = {...resultado, cantStock: 1}
-            vender("agregar", carrito, resultado, articuloVendido);
+            vender( carrito, resultado, articuloVendido);
         }
         else{
             let articuloCarrito = buscarProd(carrito, resultado.id)
-            vender("sumar", carrito, resultado, articuloCarrito);
+            vender(carrito, resultado, articuloCarrito);
         
         }    
         generaPantalla("carrito", contenedorCarrito, carrito);
@@ -120,18 +113,24 @@ function crearStockHTML(clase,  producto, pantalla) {
     let contenedor = document.createElement("div");
     let funcion = "";
     let btn_clase = "";
+    let btn_MasyMenos = "";
     const {id, nombre, cantStock, precio} = producto;
     contenedor.className = `card ${clase}`;
     contenedor.id=`StockProd${producto.id}`;
     pantalla === "admin" ? funcion = "Elminar" : funcion = "Agregar al carrito";
     pantalla === "admin" ? btn_clase = "btn-eliminar" : btn_clase = "btn-carrito";
-
+    if (pantalla === "admin") {
+        btn_MasyMenos = `<a class="btn btn-primary btn-mas id-${parseInt(id)}"  id="btn-mas">+</a>
+         <a class="btn btn-primary btn-menos id-${parseInt(id)}"  id="btn-menos">-</a>`
+    }
     contenedor.innerHTML = 
         `<div class="card-body">
             <h5 class="card-title">${nombre}</h5>
             <p class="card-text">Cant. Stock: ${cantStock}</p>
             <p class="card-text">precio: ${precio}</p>
-            <a class="btn btn-primary ${btn_clase} id-${parseInt(id)}" id="btn-Carrito">${funcion}</a>
+            ${btn_MasyMenos}
+            <a class="btn btn-primary ${btn_clase} id-${parseInt(id)}" id="btn-Carrito"
+            data-bs-toggle="modal" data-bs-target="#delProd">${funcion}</a>
         </div>`             
     contenedorStock.appendChild(contenedor);
 }
@@ -195,7 +194,6 @@ function generaPantalla (clase,contenedor, productos){
             crearCarritoHTML(clase, producto)
             }
         )
-     //   console.log(pantalla)
         if (productos.length > 0 ){
             totalCarrito(carrito.reduce((acumulador, producto) => {
                     return acumulador + producto.precio * producto.cantStock;
@@ -350,7 +348,6 @@ function bajaProducto(productos, prodId){
 //funcion para generar un nuevo articulo
 function cargarActiculo(e, productos,contenedor){
     e.preventDefault();
-    console.log("carga articulo")
     let articulo = "";
     let precio = "";
     let stock = "";
@@ -359,33 +356,63 @@ function cargarActiculo(e, productos,contenedor){
     articulo = datos.get("articulo")
     stock = datos.get("stock")
     precio = datos.get("precio")
-
     altaProducto(articulo, stock, precio)
     generaPantalla("cardStock", contenedor, productos, pantalla);
     guardarLocalStorage("productos", productos);
 } 
 
 //funcion para eliminar  un articulo
-function eliminarArticulo(e){
+function eliminarArticulo(e, productos){
     const prod = e.target.closest(".cardStock");
-    console.log("eliminarArticulo")
     if (e.target.classList.contains("btn-eliminar")) {
-        const h5 = prod.querySelector("h5");
-        console.log(h5)
         bajaProducto(productos,obtieneId(e.target.classList[3]))
         bajaProducto(carrito, obtieneId(e.target.classList[3]))
         prod.remove();
         guardarLocalStorage("productos", productos);
         guardarLocalStorage("carrito", carrito);
-        alert(`se dio de baja el producto ${h5.textContent}` );
-
     }
     
 };
 
+//funcion para eliminar  un articulo
+function eliminarArticuloxId(productos,id){
+    bajaProducto(productos, id)
+    bajaProducto(carrito, id)
+    guardarLocalStorage("productos", productos);
+    guardarLocalStorage("carrito", carrito);
+    
+};
+
+//resta un articulo del stock
+function ActualizarArticulo(e){
+    const resultado = buscarProd(productos, obtieneId(e.target.classList[3]))    
+    e.target.classList.contains("btn-mas")   && resultado.cantStock++ ;
+    e.target.classList.contains("btn-menos") && resultado.cantStock--;
+    if (resultado.cantStock <= 0) {
+        eliminarArticuloxId(productos,resultado.id);
+    } 
+    
+    
+    generaPantalla("cardStock",contenedorStock, productos);        
+    guardarLocalStorage("productos", productos);
+}
+
+//resta un articulo del carrito
+function sumarArticulo(e, pantalla){
+    if (e.target.classList.contains("btn-mas")) {
+        const resultado = buscarProd(productos, obtieneId(e.target.classList[3]))
+        const resultadoCarrito = buscarProd(carrito,obtieneId(e.target.classList[3]))
+        vender(carrito, resultado, resultadoCarrito);
+        generaPantalla("carrito", contenedorCarrito, carrito);
+        if (pantalla === "ppal") {
+            generaPantalla("cardStock",contenedorStock, productos);        
+        }
+        guardarLocalStorage("carrito", carrito);
+        guardarLocalStorage("productos", productos);
+    }   
+}
+
 function obtieneId (clase){
-    console.log(clase)
-    console.log(parseInt(clase.split("-")[1]))
     return (parseInt(clase.split("-")[1]))
 }
 
@@ -430,17 +457,29 @@ function login(e){
 function detalleVentas(ventas){
     let detalle = document.getElementById("contenedor-ventas-lista");
     let htmlDetalle = "";
-    //let resumenProd = document.getElementById("resumen-productos");
-    //let resumenEnvios = document.getElementById("resumen-envios");
-    let totalVentas = 0;
     let totalProd = 0;
+    let medioDePago = "";
     htmlDetalle +=`
         <div class="ventas" id="ventas">
             <div id="detalle-ventas" class="detalle-ventas">
                 
                 <div class="tarjeta-resumen">
                     <h2>Detalle de ventas</h2>`;
-    ventas.forEach(venta => {
+        ventas.forEach(venta => {
+        switch (venta.mpago) {
+        case "credito":
+            medioDePago = "Tarjeta de crédito";
+            break;
+        case "debito":
+            medioDePago = "Tarjeta de débito";
+            break;
+        case "transferencia":
+            medioDePago = "Transferencia bancaria";
+            break;
+        case "mercadopago":
+            medioDePago = "Mercado Pago";
+            break;
+        }   
         htmlDetalle +=`
                 <div class="tarjeta-resumen">    
                     <div class="grid-resumen">
@@ -467,6 +506,10 @@ function detalleVentas(ventas){
                         <div class="item-resumen">
                             <span>Email:</span>
                             <strong id="fecha">${venta.Envio.email}</strong>
+                        </div>
+                        <div class="item-resumen">
+                            <span>Método de Pago:</span>
+                            <strong id="fecha">${medioDePago}</strong>
                         </div>
                     </div>
                     <hr>
@@ -498,14 +541,13 @@ function detalleVentas(ventas){
                                 </tr>
             `;
         });      
-        totalVentas += parseFloat(venta.total);  
         htmlDetalle +=`<tbody class="table-group-divider">
                                 <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td>Total Venta</td>
-                                    <td>${totalVentas}</td>
+                                    <td>${parseFloat(venta.total)}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -522,7 +564,6 @@ function detalleVentas(ventas){
 }  
 
 function resumenVentas(ventas){
-    let resumen = document.getElementById("contenedor-ventas");
     let totalVentas = 0;
     let totalProd = 0;
     ventas.forEach(venta => {
